@@ -257,6 +257,7 @@ def check_updates():
                 ) | \
                 sort | uniq -d | wc -l
               ) 
+              $(grep -o '[0-9]* not upgraded.' <<<"$Updates"| awk '{print "- "$1}')
           ))
     '''
     script_file = tempfile.NamedTemporaryFile('wt')
