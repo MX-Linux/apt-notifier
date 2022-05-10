@@ -11,7 +11,7 @@ Architecture: all
 Depends: ${misc:Depends}, anacron, apt, bash (>= 3.2-4), gtkdialog,
  policykit-1-gnome | lxpolkit | polkit-1-auth-agent, python-pyqt5,
  synaptic | muon, xdotool, xfce4-terminal | x-terminal-emulator,
- yad (>= 0.26), unattended-upgrades, curl, python3-notify2
+ yad (>= 0.26), unattended-upgrades, curl, python3-notify2, python3-distutils
 Conflicts: mepis-aptnotify
 Replaces: mepis-aptnotify 
 Description: tray applet to notify of system and application updates
