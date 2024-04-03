@@ -26,14 +26,20 @@ ShowUnattendedUpgradesDpkgLogs()
 #set strings using translations from the apt-notfier.py python script
 LessPrompt="` gettext -d apt-notifier \"Press 'h' for help, 'q' to quit\"`"
 NoLogsFound="`gettext -d apt-notifier \"No logs found.\"`"
+username=$USER
 
-if [ -f /var/log/unattended-upgrades/unattended-upgrades-dpkg.log ]
-  then 
-    StartOfLatestDpkgLogEntries="$(ShowUnattendedUpgradesDpkgLogs | grep ^\( -B1 | grep -v -e^\( -e\-\- | grep [:][0-5][0-9][:] | cut -f1-2 -d: | rev | cut -c5- | rev | sort -u | tail -1)"
-    StartOfLatestDpkgLogEntries="$(ShowUnattendedUpgradesDpkgLogs | grep "$StartOfLatestDpkgLogEntries" -m1)"
-    ShowUnattendedUpgradesDpkgLogs | less -~ -R --prompt="--less--[$LessPrompt]" -p "$StartOfLatestDpkgLogEntries"
-  else
-    echo -e \\n"${NoLogsFound}"\\n | less -~ -R --prompt="--less--[$LessPrompt]"
+#check if user is in adm group
+if getent group adm | grep -qw "$username"; then
+  if [ -f /var/log/unattended-upgrades/unattended-upgrades-dpkg.log ]
+    then 
+      StartOfLatestDpkgLogEntries="$(ShowUnattendedUpgradesDpkgLogs | grep ^\( -B1 | grep -v -e^\( -e\-\- | grep [:][0-5][0-9][:] | cut -f1-2 -d: | rev | cut -c5- | rev | sort -u | tail -1)"
+      StartOfLatestDpkgLogEntries="$(ShowUnattendedUpgradesDpkgLogs | grep "$StartOfLatestDpkgLogEntries" -m1)"
+      ShowUnattendedUpgradesDpkgLogs | less -~ -R --prompt="--less--[$LessPrompt]" -p "$StartOfLatestDpkgLogEntries"
+    else
+      echo -e \\n"${NoLogsFound}"\\n | less -~ -R --prompt="--less--[$LessPrompt]"
+  fi
+else
+    echo "Please add yourself to 'adm' group in order to have view access for the log file."
 fi
-  
+
 exit

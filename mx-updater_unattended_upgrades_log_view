@@ -38,13 +38,19 @@ ShowUnattendedUpgradesLogs()
 LessPrompt="` gettext -d apt-notifier \"Press 'h' for help, 'q' to quit\"`"
 NoLogsFound="`gettext -d apt-notifier \"No logs found.\"`"
 SeeHistory="` gettext -d apt-notifier \"For a less detailed view see 'Auto-update dpkg log(s)' or 'History'.\"`"
+username=$USER
 
-if [ -f /var/log/unattended-upgrades/unattended-upgrades.log ]
-  then 
-    StartOfLatestEntry="$(ShowUnattendedUpgradesLogs | grep 'Initial blacklist : ' | awk '{print $1,$2}' | tail -n 1)"
-    ShowUnattendedUpgradesLogs | sed -e "\$a\\\n${SeeHistory}\\\\\n" | sed 's/\\$//' | less -~ -R --prompt="--less--[$LessPrompt]" -p "${StartOfLatestEntry}"
-  else
-    echo -e \\n"${NoLogsFound}"\\n | less -~ -R --prompt="--less--[$LessPrompt]"
+#check if user is in adm group
+if getent group adm | grep -qw "$username"; then
+  if [ -f /var/log/unattended-upgrades/unattended-upgrades.log ]
+    then 
+      StartOfLatestEntry="$(ShowUnattendedUpgradesLogs | grep 'Initial blacklist : ' | awk '{print $1,$2}' | tail -n 1)"
+      ShowUnattendedUpgradesLogs | sed -e "\$a\\\n${SeeHistory}\\\\\n" | sed 's/\\$//' | less -~ -R --prompt="--less--[$LessPrompt]" -p "${StartOfLatestEntry}"
+    else
+      echo -e \\n"${NoLogsFound}"\\n | less -~ -R --prompt="--less--[$LessPrompt]"
+  fi
+else
+    echo "Please add yourself to 'adm' group in order to have view access for the log file."
 fi
 
 exit
