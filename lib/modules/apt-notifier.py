@@ -910,12 +910,12 @@ def start_package_installer():
     cleanup_notifier_run()
 
     # find usable package installer
-    pl = "mxpi-launcher mx-packageinstaller packageinstaller"
+    pl = "mx-packageinstaller packageinstaller"
     from shutil import which
     package_installer = list(filter( lambda x: which(x), pl.split()))[0]
     if not package_installer:
         return
-    if "mxpi-launcher" in package_installer:
+    if "mx-packageinstaller" in package_installer:
         cmd = package_installer
     else:
         cmd = f"su-to-root -X -c {package_installer}"

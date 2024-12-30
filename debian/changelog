@@ -1,3 +1,10 @@
+apt-notifier (24.12.01) mx; urgency=medium
+
+  * do not launch mxpi as root
+  * fixes bug 828
+
+ -- Dolphin Oracle <dolphinoracle@gmail.com>  Mon, 30 Dec 2024 15:54:13 -0500
+
 apt-notifier (24.09.01) mx; urgency=medium
 
   * Fix: Close only current window with clicking on [x], not MX Updater.
